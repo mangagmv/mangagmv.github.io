@@ -46,11 +46,11 @@ function search() {
       geturl(query.length?`https://pdfroom.com/search?query=${query}&page=${page}`:'https://pdfroom.com').then(res=>{
         let parser = new DOMParser();
         let doc = parser.parseFromString(res, 'text/html');
-        let con = Array.from(doc.querySelectorAll('body > div > div.container.mx-auto.px-4.lg > div.my-2 > div.flex.flex-col > div'));
+        let con = Array.from(doc.querySelectorAll('div.flex.flex-wrap.my-2 div.flex.flex-col.mb-4 > div.flex.flex-row.bg-white.border.border-gray-300'));
         showSearch(con.map(manga=>{
           return {
             id: manga.querySelector('a').href,
-            title: manga.querySelector('img').alt,
+            title: manga.querySelector('img').getAttribute('alt'),
             img: manga.querySelector('img').src
           };
         }));
@@ -63,7 +63,7 @@ function search() {
         let con = Array.from(doc.querySelectorAll('#app > main > div:nth-child(2) > div.col-12.col-lg-8.col-xl-9 > div:nth-child(3) > div > a'));
         showSearch(con.map(manga=>{
           return {
-            id: manga.querySelector('a').href,
+            id: manga.href,
             title: manga.querySelector('h4').innerText,
             img: manga.querySelector('style').innerHTML.match(/background-image: url\('(.*?)'\);/)[1]
           };

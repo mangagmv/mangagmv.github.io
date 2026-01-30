@@ -2,82 +2,22 @@
 <html lang="en">
   <head>
     <title>MangaGMV</title>
+    <link rel="icon" href="https://mangagmv.github.io/favicon.ico" type="image/x-icon">
+
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-      body {
-        width: 100vw;
-        max-width: 1250px;
-        color: white;
-        margin: 0px auto;
-        background: black;
-        font-family: Arial;
-      }
-      input, button {
-        color: white;
-        background: #222;
-        margin: 2px;
-        padding: 2px 4px;
-        border: 2px #444 solid;
-        border-radius: 0.75rem;
-      }
-      button {
-        border-radius: 0.25rem;
-      }
-      button:hover {
-        background: #444;
-      }
-      button[disabled] {
-        color: #ddd;
-        background: #111;
-        cursor: not-allowed;
-      }
-      .clicky {
-        cursor: pointer;
-      }
-      .clicky:hover {
-        background: #222;
-      }
-    </style>
+    <link rel="stylesheet" href="/style.css">
   </head>
   <body>
-    <div>
-      <input type="search" id="buswa" onkeyup="if(event.key=='Enter'){search()}">
-      <button onclick="search()">Search</button>
-    </div>
-    <div id="results"></div>
+    <div id="con"><p>Connecting</p></div>
     <script>
-      console.clear();
-      function geturl(url) {
-        return new Promise((resolve, reject) => {
-          fetch('https://api.fsh.plus/html?url='+encodeURIComponent(url))
-            .then(res=>res.text())
-            .then(res=>resolve(res));
-        })
-      }
-      function search() {
-        geturl(`https://zonatmo.com/library?_pg=1&title=${document.getElementById('buswa').value}`).then(res=>{
-          var parser = new DOMParser();
-          var doc = parser.parseFromString(res, "text/html");
-          let con = Array.from(doc.querySelectorAll('#app > main > div:nth-child(2) > div.col-12.col-lg-8.col-xl-9 > div:nth-child(3) > div > a'));
-          document.getElementById('results').innerHTML = `<p>${con.length} results</p>`;
-          con.forEach(m => {
-            let title = m.querySelector('h4').innerText;
-            document.getElementById('results').innerHTML += `<li onclick="view('${m.href}')" class="clicky">${title}</li>`;
-          })
-        })
-      }
-      function view(url) {
-        geturl(url).then(res=>{
-          var parser = new DOMParser();
-          var doc = parser.parseFromString(res, "text/html");
-          let con = Array.from(doc.querySelectorAll('#chapters > ul > li')).concat(Array.from(doc.querySelectorAll('#chapters > ul > #chapters-collapsed > li')) ?? []);
-          document.getElementById('results').innerHTML = `<p>Episodes</p>`;
-          con.forEach(m => {
-            let title = m.querySelector('h4 > div > div > a').innerHTML.split('>').slice(-1)[0];
-            document.getElementById('results').innerHTML += `<li onclick="ep('${m.querySelector('div > div > ul > li > div > div.col-2.col-sm-1.text-right > a').href}')" class="clicky">${title}</li>`;
-          })
-        })
-      }
+      fetch('https://api.fsh.plus/time', { signal: AbortSignal.timeout(2500) })
+        .then(res=>res.json())
+        .then(data=>document.getElementById('con').remove())
+        .catch(err=>document.getElementById('con').innerHTML = '<p>Cannot connect</p>');
     </script>
+    <div id="top"></div>
+    <div id="results"></div>
+    <script src="/script.js"></script>
   </body>
 </html>

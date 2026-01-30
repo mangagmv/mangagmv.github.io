@@ -1,0 +1,33 @@
+body {
+  width: 100vw;
+  max-width: 1250px;
+  color: white;
+  margin: 0px auto;
+  background: black;
+  font-family: Arial;
+}
+input, button {
+  color: white;
+  background: #222;
+  margin: 2px;
+  padding: 2px 4px;
+  border: 2px #444 solid;
+  border-radius: 0.75rem;
+}
+button {
+  border-radius: 0.25rem;
+}
+button:hover {
+  background: #444;
+}
+button[disabled] {
+  color: #ddd;
+  background: #111;
+  cursor: not-allowed;
+}
+.clicky {
+  cursor: pointer;
+}
+.clicky:hover {
+  background: #222;
+}

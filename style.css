@@ -51,10 +51,6 @@ select {
 #provider {
   margin-right: 40px;
 }
-div:has(>iframe) {
-  display: flex;
-  justify-content: center;
-}
 iframe {
   width: 100vw;
   max-width: 1250px;

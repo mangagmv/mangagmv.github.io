@@ -98,32 +98,18 @@ function episodes() {
   }
 }
 
-function showVideo(videos, provider) {
-  document.getElementById('results').innerHTML = `${videos.map(s=>`<button onclick="updateVid('${s.code}', ${provider}, '${s.title}')">${s.title}${s.ads?' (ADS)':''}</button>`).join('')}
+function showView(url, title, provider) {
+  document.getElementById('results').innerHTML = `<a href="${url}" download="${title}.pdf" target="_blank"><button>Download</button></a>
 <br>
-<div>
-  <iframe allowfullscreen referrerpolicy="no-referrer" sandbox="allow-downloads allow-forms allow-modals allow-orientation-lock allow-presentation allow-scripts allow-same-origin" allow="autoplay; compute-pressure; cross-origin-isolated; encrypted-media; fullscreen; gamepad; local-fonts; midi; picture-in-picture; screen-wake-lock; speaker-selection; storage-access; web-share"></iframe>
-</div>
-<span style="display:flex">
-  <button onclick="state[state.length]={page:'vid',id:'${state[si].id}',t:\`${state[si].t}\`,e:'${Number(state[si].e-1)}',provider:state[si].provider};si=state.length-1;setTop();"${state[si].e<2?' style="display:none"':''}>Prev</button>
-  <span style="flex:1"></span>
-  <button onclick="download('${videos[0]?.url}', '${state[si].t}', '${state[si].id}')" style="display:none">Download</button>
-  <span style="flex:1"></span>
-  <button onclick="state[state.length]={page:'vid',id:'${state[si].id}',t:\`${state[si].t}\`,e:'${Number(state[si].e)+1}',provider:state[si].provider};si=state.length-1;setTop();">Next</button>
-</span>`;
+<iframe src="${url}" allowfullscreen referrerpolicy="no-referrer" sandbox="allow-downloads" allow="autoplay; cross-origin-isolated; encrypted-media; fullscreen; local-fonts; midi; picture-in-picture; screen-wake-lock; web-share"></iframe>`;
 }
 function view() {
   let provider = state[si].provider??0;
   switch (provider) {
     case 0:
-      geturl(`https://www3.animeflv.net/ver/${state[si].id}-${state[si].e}`)
-        .then(res=>{
-          let videos = JSON.parse(res.match(/var videos = {[^¬].*?};/)[0].split(';')[0].split(' = ')[1]);
-          showVideo(videos.SUB, provider);
-          updateVid(videos.SUB[0].code, 0, videos.SUB[0].title);
-        });
+      showView('https://f.openpdfs.org/'+state[si].id.split('/').slice(-1)[0]+'.pdf', state[si].t, 0);
       break;
-    case 1:
+    case 1:/*
       geturl(`https://${['aniwatchtv','hianime','9animetv'][provider-3]}.to/ajax/${provider===5?'':'v2/'}episode/servers?episodeId=${state[si].id.split('-').slice(-1)[0]}`)
         .then(res=>{
           const parser = new DOMParser();
@@ -138,7 +124,7 @@ function view() {
             });
           showVideo(videos, provider);
           updateVid(videos[0].code, provider);
-        });
+        });*/
       break;
   }
 }
